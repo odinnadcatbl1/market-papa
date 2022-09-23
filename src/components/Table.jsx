@@ -9,12 +9,16 @@ import {
     StyledInput,
     StyledButton,
 } from "../styles/components";
+
+import usePagination from "../hooks/usePagination";
+
 import { useActions } from "../hooks/useActions";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 
 import searchFilter from "../utils/searchFilter";
 import sortByField from "../utils/sortByField";
+import Pagination from "./Pagination";
 
 const Table = () => {
     const { data, error, loading } = useSelector((state) => state.data);
@@ -28,6 +32,9 @@ const Table = () => {
         direction: false,
     });
     const [filteredData, setFilteredData] = useState([]);
+
+    const { prev, next, jump, maxPage, currentData, currentPage } =
+        usePagination(filteredData, 10);
 
     const handlerSort = (e) => {
         if (sortValue.sortBy === e.target.id) {
@@ -88,7 +95,9 @@ const Table = () => {
         } else {
             setFilteredData(searchFilter(data, searchWord));
         }
-    }, [searchWord, selectValues]);
+
+        jump(1);
+    }, [searchWord, selectValues, sortValue]);
 
     return (
         <Container>
@@ -156,15 +165,19 @@ const Table = () => {
                 </thead>
 
                 <tbody>
-                    {error ? (
-                        <tr>Не удалось загрузить данные: {error}</tr>
-                    ) : (
-                        <></>
+                    {error && (
+                        <tr>
+                            <td>Не удалось загрузить данные: {error}</td>
+                        </tr>
                     )}
 
-                    {loading ? <tr>Загрузка данных, подождите..</tr> : <></>}
-                    {filteredData.length ? (
-                        filteredData.map((data) => (
+                    {loading && (
+                        <tr>
+                            <td>Загрузка данных, подождите.</td>
+                        </tr>
+                    )}
+                    {currentData().length ? (
+                        currentData().map((data) => (
                             <tr key={data.id}>
                                 <td>{data.userId}</td>
                                 <td>{data.id}</td>
@@ -173,10 +186,23 @@ const Table = () => {
                             </tr>
                         ))
                     ) : (
-                        <tr>Ничего не найдено..</tr>
+                        <tr>
+                            <td>Ничего не найдено..</td>
+                        </tr>
                     )}
                 </tbody>
             </StyledTable>
+
+            {filteredData.length > 10 && (
+                <Pagination
+                    prev={prev}
+                    next={next}
+                    jump={jump}
+                    currentPage={currentPage}
+                    currentData={filteredData}
+                    maxPage={maxPage}
+                />
+            )}
         </Container>
     );
 };
