@@ -18,6 +18,12 @@ export const StyledTable = styled.table`
             padding: 10px 15px;
             background: #d8d8d8;
             font-size: 16px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f3f3f3;
+            }
 
             &:first-child {
                 border-radius: 10px 0 0 10px;
