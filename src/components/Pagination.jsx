@@ -1,4 +1,3 @@
-import styled, { css } from "styled-components";
 import { StyledButton } from "../styles/components";
 import {
     StyledPagination,
