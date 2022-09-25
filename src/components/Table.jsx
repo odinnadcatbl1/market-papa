@@ -37,6 +37,8 @@ const Table = () => {
         usePagination(filteredData, 10);
 
     const handlerSort = (e) => {
+        jump(1);
+
         if (sortValue.sortBy === e.target.id) {
             setSortValue({
                 sortBy: e.target.id,
@@ -60,44 +62,72 @@ const Table = () => {
         }
     };
 
+    const filter = () => {};
+
+    const onSearch = (e) => {
+        jump(1);
+        setSearchWord(e.target.value);
+        if (selectValues.length) {
+            setFilteredData(
+                searchFilter(data, e.target.value)
+                    .sort(sortByField(sortValue.sortBy, sortValue.direction))
+                    .filter((data) => {
+                        return selectValues
+                            .map((select) => select.value)
+                            .includes(data.userId);
+                    })
+            );
+        } else {
+            setFilteredData(
+                searchFilter(data, e.target.value).sort(
+                    sortByField(sortValue.sortBy, sortValue.direction)
+                )
+            );
+        }
+    };
+
+    const onSelect = (values) => {
+        jump(1);
+
+        setSelectValues(values);
+        if (values.length) {
+            setFilteredData(
+                searchFilter(data, searchWord)
+                    .sort(sortByField(sortValue.sortBy, sortValue.direction))
+                    .filter((data) => {
+                        return values
+                            .map((select) => select.value)
+                            .includes(data.userId);
+                    })
+            );
+        } else {
+            setFilteredData(
+                searchFilter(data, searchWord).sort(
+                    sortByField(sortValue.sortBy, sortValue.direction)
+                )
+            );
+        }
+    };
+
     useEffect(() => {
         fetchPosts();
     }, []);
 
     useEffect(() => {
-        const selectOptions = [
-            ...new Set(
-                data.map((data) => {
-                    return data.userId;
-                })
-            ),
-        ];
+        setFilteredData(searchFilter(data, searchWord));
 
         setSelectOptions(
-            selectOptions.map((select) => {
+            [...new Set(data.map((data) => data.userId))].map((select) => {
                 return { value: select, label: select };
             })
         );
-
-        setFilteredData(data);
     }, [data]);
 
     useEffect(() => {
-        if (selectValues.length) {
-            const searchedData = searchFilter(data, searchWord);
-            setFilteredData(
-                searchedData.filter((data) => {
-                    return selectValues
-                        .map((select) => select.value)
-                        .includes(data.userId);
-                })
-            );
-        } else {
-            setFilteredData(searchFilter(data, searchWord));
+        if (currentPage === 0) {
+            jump(1);
         }
-
-        jump(1);
-    }, [searchWord, selectValues, sortValue]);
+    }, [searchWord]);
 
     return (
         <Container>
@@ -108,7 +138,7 @@ const Table = () => {
                     <StyledInput
                         width={"300px"}
                         placeholder="Поиск"
-                        onChange={(e) => setSearchWord(e.target.value)}
+                        onChange={onSearch}
                         value={searchWord}
                     />
                     <Select
@@ -116,7 +146,7 @@ const Table = () => {
                         closeMenuOnSelect={false}
                         components={makeAnimated()}
                         isMulti
-                        onChange={setSelectValues}
+                        onChange={onSelect}
                         placeholder={"Фильтр"}
                         value={selectValues}
                     />
@@ -165,7 +195,7 @@ const Table = () => {
                 </thead>
 
                 <tbody>
-                    {error && (
+                    {error && !loading && (
                         <tr>
                             <td>Не удалось загрузить данные: {error}</td>
                         </tr>
