@@ -83,17 +83,18 @@ export const StyledTableActions = styled.div`
 
 export const StyledButton = styled.button`
     margin: 0 10px;
-    background-color: #d8d8d8;
+    background-color: ${(props) => props.color || "#d8d8d8"};
     border: none;
     border-radius: 5px;
     color: black;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 600;
     padding: 10px 20px;
     cursor: pointer;
 
     transition: all 0.2s ease;
     &:hover {
-        background-color: #f3f3f3;
+        opacity: 0.7;
     }
 `;
 

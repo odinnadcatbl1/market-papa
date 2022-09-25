@@ -229,6 +229,7 @@ const Table = () => {
                                 <td>{data.body}</td>
                                 <td>
                                     <StyledButton
+                                        color="#FFC0C7"
                                         onClick={() => deletePost(data.id)}
                                     >
                                         Удалить
