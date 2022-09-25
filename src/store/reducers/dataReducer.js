@@ -26,6 +26,12 @@ export const dataReducer = (state = initialState, action) => {
                 error: action.payload,
             };
 
+        case "DELETE_POST":
+            return {
+                ...state,
+                data: state.data.filter((post) => post.id !== action.payload),
+            };
+
         default:
             return state;
     }

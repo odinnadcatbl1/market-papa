@@ -22,7 +22,7 @@ import Pagination from "./Pagination";
 
 const Table = () => {
     const { data, error, loading } = useSelector((state) => state.data);
-    const { fetchPosts } = useActions();
+    const { fetchPosts, deletePost } = useActions();
 
     const [selectValues, setSelectValues] = useState([]);
     const [selectOptions, setSelectOptions] = useState([{}]);
@@ -112,8 +112,23 @@ const Table = () => {
     }, []);
 
     useEffect(() => {
-        setFilteredData(searchFilter(data, searchWord));
-
+        if (selectValues.length) {
+            setFilteredData(
+                searchFilter(data, searchWord)
+                    .sort(sortByField(sortValue.sortBy, sortValue.direction))
+                    .filter((data) => {
+                        return selectValues
+                            .map((select) => select.value)
+                            .includes(data.userId);
+                    })
+            );
+        } else {
+            setFilteredData(
+                searchFilter(data, searchWord).sort(
+                    sortByField(sortValue.sortBy, sortValue.direction)
+                )
+            );
+        }
         setSelectOptions(
             [...new Set(data.map((data) => data.userId))].map((select) => {
                 return { value: select, label: select };
@@ -125,7 +140,7 @@ const Table = () => {
         if (currentPage === 0) {
             jump(1);
         }
-    }, [searchWord]);
+    }, [searchWord, selectValues]);
 
     return (
         <Container>
@@ -189,6 +204,7 @@ const Table = () => {
                                     <>&#x25bc;</>
                                 ))}
                         </th>
+                        <th></th>
                     </tr>
                 </thead>
 
@@ -211,6 +227,13 @@ const Table = () => {
                                 <td>{data.id}</td>
                                 <td>{data.title}</td>
                                 <td>{data.body}</td>
+                                <td>
+                                    <StyledButton
+                                        onClick={() => deletePost(data.id)}
+                                    >
+                                        Удалить
+                                    </StyledButton>
+                                </td>
                             </tr>
                         ))
                     ) : (
