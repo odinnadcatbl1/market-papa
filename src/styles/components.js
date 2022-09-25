@@ -82,7 +82,7 @@ export const StyledTableActions = styled.div`
 `;
 
 export const StyledButton = styled.button`
-    margin: 0 10px;
+    margin: 5px 10px;
     background-color: ${(props) => props.color || "#d8d8d8"};
     border: none;
     border-radius: 5px;

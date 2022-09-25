@@ -234,6 +234,8 @@ const Table = () => {
                                     >
                                         Удалить
                                     </StyledButton>
+
+                                    <StyledButton>Редактировать</StyledButton>
                                 </td>
                             </tr>
                         ))
