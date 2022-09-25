@@ -62,8 +62,6 @@ const Table = () => {
         }
     };
 
-    const filter = () => {};
-
     const onSearch = (e) => {
         jump(1);
         setSearchWord(e.target.value);
