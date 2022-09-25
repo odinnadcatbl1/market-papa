@@ -62,11 +62,12 @@ export const StyledTable = styled.table`
     }
 `;
 
-export const StyledTableTitle = styled.h2`
+export const StyledTitle = styled.h2`
     font-size: 20px;
     font-weight: 700;
     letter-spacing: 0.04;
     text-transform: uppercase;
+    text-align: ${(props) => props.textAlign || "left"};
 `;
 
 export const StyledTableHeader = styled.div`
@@ -75,7 +76,7 @@ export const StyledTableHeader = styled.div`
     justify-content: space-between;
 `;
 
-export const StyledTableActions = styled.div`
+export const StyledActions = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -100,7 +101,7 @@ export const StyledButton = styled.button`
 
 export const StyledInput = styled.input`
     width: ${(props) => props.width || "auto"};
-    margin: 0 10px;
+    margin: 5px 10px;
     padding: 10px 20px;
     border: 1px solid black;
     border-radius: 8px;
@@ -147,4 +148,43 @@ export const PaginationItem = styled.li`
             color: white;
             background-color: #404040;
         `}
+`;
+
+export const ModalLayout = styled.div`
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.4s ease;
+
+    ${(props) =>
+        props.active &&
+        css`
+            opacity: 1;
+            pointer-events: all;
+        `}
+`;
+
+export const ModalContent = styled.div`
+    padding: 20px 30px;
+    border-radius: 10px;
+    background-color: white;
+    transform: scale(0.5);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    ${(props) =>
+        props.active &&
+        css`
+            transform: scale(1);
+        `};
 `;

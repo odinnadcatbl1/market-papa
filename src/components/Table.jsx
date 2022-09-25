@@ -4,8 +4,8 @@ import {
     Container,
     StyledTable,
     StyledTableHeader,
-    StyledTableTitle,
-    StyledTableActions,
+    StyledTitle,
+    StyledActions,
     StyledInput,
     StyledButton,
 } from "../styles/components";
@@ -19,10 +19,13 @@ import makeAnimated from "react-select/animated";
 import searchFilter from "../utils/searchFilter";
 import sortByField from "../utils/sortByField";
 import Pagination from "./Pagination";
+import Modal from "./Modal";
 
 const Table = () => {
     const { data, error, loading } = useSelector((state) => state.data);
     const { fetchPosts, deletePost } = useActions();
+
+    const [modalActive, setModalActive] = useState(false);
 
     const [selectValues, setSelectValues] = useState([]);
     const [selectOptions, setSelectOptions] = useState([{}]);
@@ -143,121 +146,128 @@ const Table = () => {
     }, [searchWord, selectValues]);
 
     return (
-        <Container>
-            <StyledTableHeader>
-                <StyledTableTitle>Posts</StyledTableTitle>
-                <StyledTableActions>
-                    <StyledButton>Добавить</StyledButton>
-                    <StyledInput
-                        width={"300px"}
-                        placeholder="Поиск"
-                        onChange={onSearch}
-                        value={searchWord}
-                    />
-                    <Select
-                        options={selectOptions}
-                        closeMenuOnSelect={false}
-                        components={makeAnimated()}
-                        isMulti
-                        onChange={onSelect}
-                        placeholder={"Фильтр"}
-                        value={selectValues}
-                    />
-                </StyledTableActions>
-            </StyledTableHeader>
-            <StyledTable>
-                <thead className="table__head">
-                    <tr>
-                        <th id="userId" onClick={handlerSort}>
-                            UserId
-                            {sortValue.sortBy === "userId" &&
-                                (sortValue.direction ? (
-                                    <>&#x25b2;</>
-                                ) : (
-                                    <>&#x25bc;</>
-                                ))}
-                        </th>
-                        <th id="id" onClick={handlerSort}>
-                            ID
-                            {sortValue.sortBy === "id" &&
-                                (sortValue.direction ? (
-                                    <>&#x25b2;</>
-                                ) : (
-                                    <>&#x25bc;</>
-                                ))}
-                        </th>
-                        <th id="title" onClick={handlerSort}>
-                            Заголовок
-                            {sortValue.sortBy === "title" &&
-                                (sortValue.direction ? (
-                                    <>&#x25b2;</>
-                                ) : (
-                                    <>&#x25bc;</>
-                                ))}
-                        </th>
-                        <th id="body" onClick={handlerSort}>
-                            Описание
-                            {sortValue.sortBy === "body" &&
-                                (sortValue.direction ? (
-                                    <>&#x25b2;</>
-                                ) : (
-                                    <>&#x25bc;</>
-                                ))}
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {error && !loading && (
+        <>
+            <Container>
+                <StyledTableHeader>
+                    <StyledTitle>Posts</StyledTitle>
+                    <StyledActions>
+                        <StyledButton>Добавить</StyledButton>
+                        <StyledInput
+                            width={"300px"}
+                            placeholder="Поиск"
+                            onChange={onSearch}
+                            value={searchWord}
+                        />
+                        <Select
+                            options={selectOptions}
+                            closeMenuOnSelect={false}
+                            components={makeAnimated()}
+                            isMulti
+                            onChange={onSelect}
+                            placeholder={"Фильтр"}
+                            value={selectValues}
+                        />
+                    </StyledActions>
+                </StyledTableHeader>
+                <StyledTable>
+                    <thead className="table__head">
                         <tr>
-                            <td>Не удалось загрузить данные: {error}</td>
+                            <th id="userId" onClick={handlerSort}>
+                                UserId
+                                {sortValue.sortBy === "userId" &&
+                                    (sortValue.direction ? (
+                                        <>&#x25b2;</>
+                                    ) : (
+                                        <>&#x25bc;</>
+                                    ))}
+                            </th>
+                            <th id="id" onClick={handlerSort}>
+                                ID
+                                {sortValue.sortBy === "id" &&
+                                    (sortValue.direction ? (
+                                        <>&#x25b2;</>
+                                    ) : (
+                                        <>&#x25bc;</>
+                                    ))}
+                            </th>
+                            <th id="title" onClick={handlerSort}>
+                                Заголовок
+                                {sortValue.sortBy === "title" &&
+                                    (sortValue.direction ? (
+                                        <>&#x25b2;</>
+                                    ) : (
+                                        <>&#x25bc;</>
+                                    ))}
+                            </th>
+                            <th id="body" onClick={handlerSort}>
+                                Описание
+                                {sortValue.sortBy === "body" &&
+                                    (sortValue.direction ? (
+                                        <>&#x25b2;</>
+                                    ) : (
+                                        <>&#x25bc;</>
+                                    ))}
+                            </th>
+                            <th></th>
                         </tr>
-                    )}
+                    </thead>
 
-                    {loading && (
-                        <tr>
-                            <td>Загрузка данных, подождите.</td>
-                        </tr>
-                    )}
-                    {currentData().length ? (
-                        currentData().map((data) => (
-                            <tr key={data.id}>
-                                <td>{data.userId}</td>
-                                <td>{data.id}</td>
-                                <td>{data.title}</td>
-                                <td>{data.body}</td>
-                                <td>
-                                    <StyledButton
-                                        color="#FFC0C7"
-                                        onClick={() => deletePost(data.id)}
-                                    >
-                                        Удалить
-                                    </StyledButton>
-
-                                    <StyledButton>Редактировать</StyledButton>
-                                </td>
+                    <tbody>
+                        {error && !loading && (
+                            <tr>
+                                <td>Не удалось загрузить данные: {error}</td>
                             </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td>Ничего не найдено..</td>
-                        </tr>
-                    )}
-                </tbody>
-            </StyledTable>
+                        )}
 
-            {filteredData.length > 10 && (
-                <Pagination
-                    prev={prev}
-                    next={next}
-                    jump={jump}
-                    currentPage={currentPage}
-                    currentData={filteredData}
-                    maxPage={maxPage}
-                />
-            )}
-        </Container>
+                        {loading && (
+                            <tr>
+                                <td>Загрузка данных, подождите.</td>
+                            </tr>
+                        )}
+                        {currentData().length ? (
+                            currentData().map((data) => (
+                                <tr key={data.id}>
+                                    <td>{data.userId}</td>
+                                    <td>{data.id}</td>
+                                    <td>{data.title}</td>
+                                    <td>{data.body}</td>
+                                    <td>
+                                        <StyledButton
+                                            color="#FFC0C7"
+                                            onClick={() => deletePost(data.id)}
+                                        >
+                                            Удалить
+                                        </StyledButton>
+
+                                        <StyledButton
+                                            onClick={() => setModalActive(true)}
+                                        >
+                                            Редактировать
+                                        </StyledButton>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td>Ничего не найдено..</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </StyledTable>
+
+                {filteredData.length > 10 && (
+                    <Pagination
+                        prev={prev}
+                        next={next}
+                        jump={jump}
+                        currentPage={currentPage}
+                        currentData={filteredData}
+                        maxPage={maxPage}
+                    />
+                )}
+            </Container>
+            <Modal active={modalActive} setActive={setModalActive} />
+        </>
     );
 };
 
