@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import {
     Container,
@@ -26,6 +26,7 @@ const Table = () => {
     const { fetchPosts, deletePost } = useActions();
 
     const [modalActive, setModalActive] = useState(false);
+    const [clickedId, setClickedId] = useState(null);
 
     const [selectValues, setSelectValues] = useState([]);
     const [selectOptions, setSelectOptions] = useState([{}]);
@@ -110,6 +111,16 @@ const Table = () => {
         }
     };
 
+    const onEditPost = useCallback((id) => {
+        setClickedId(id);
+        setModalActive(true);
+    }, []);
+
+    const onAddPost = () => {
+        setClickedId(null);
+        setModalActive(true);
+    };
+
     useEffect(() => {
         fetchPosts();
     }, []);
@@ -137,6 +148,8 @@ const Table = () => {
                 return { value: select, label: select };
             })
         );
+
+        console.log(data);
     }, [data]);
 
     useEffect(() => {
@@ -151,7 +164,9 @@ const Table = () => {
                 <StyledTableHeader>
                     <StyledTitle>Posts</StyledTitle>
                     <StyledActions>
-                        <StyledButton>Добавить</StyledButton>
+                        <StyledButton onClick={onAddPost}>
+                            Добавить
+                        </StyledButton>
                         <StyledInput
                             width={"300px"}
                             placeholder="Поиск"
@@ -240,7 +255,7 @@ const Table = () => {
                                         </StyledButton>
 
                                         <StyledButton
-                                            onClick={() => setModalActive(true)}
+                                            onClick={() => onEditPost(data.id)}
                                         >
                                             Редактировать
                                         </StyledButton>
@@ -266,7 +281,12 @@ const Table = () => {
                     />
                 )}
             </Container>
-            <Modal active={modalActive} setActive={setModalActive} />
+            <Modal
+                active={modalActive}
+                setActive={setModalActive}
+                clickedId={clickedId}
+                options={selectOptions}
+            />
         </>
     );
 };
