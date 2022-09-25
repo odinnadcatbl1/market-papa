@@ -32,6 +32,24 @@ export const dataReducer = (state = initialState, action) => {
                 data: state.data.filter((post) => post.id !== action.payload),
             };
 
+        case "ADD_POST":
+            return {
+                ...state,
+                data: [...state.data, action.payload],
+            };
+
+        case "CHANGE_POST":
+            const changedPost = action.payload;
+            return {
+                ...state,
+                data: [
+                    ...state.data.filter((post) => {
+                        return post.id !== changedPost.id;
+                    }),
+                    changedPost,
+                ],
+            };
+
         default:
             return state;
     }

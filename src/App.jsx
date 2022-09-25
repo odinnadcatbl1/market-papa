@@ -4,9 +4,7 @@ import GLobalStyles from "./styles/global";
 function App() {
     return (
         <>
-            <div className="app">
-                <Table />
-            </div>
+            <Table />
             <GLobalStyles />
         </>
     );
