@@ -150,6 +150,13 @@ export const PaginationItem = styled.li`
         `}
 `;
 
+export const StyledForm = styled.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+`;
+
 export const ModalLayout = styled.div`
     height: 100vh;
     width: 100vw;

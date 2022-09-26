@@ -10,6 +10,7 @@ import {
     StyledTitle,
     ModalLayout,
     ModalContent,
+    StyledForm,
 } from "../styles/components";
 
 const Modal = ({ active, setActive, clickedId, options }) => {
@@ -20,7 +21,8 @@ const Modal = ({ active, setActive, clickedId, options }) => {
     const [body, setBody] = useState("");
     const [userId, setUserId] = useState(null);
 
-    const onSubmit = () => {
+    const onSubmit = (e) => {
+        e.preventDefault();
         if (userId.value && title && body) {
             if (clickedId) {
                 changePost({
@@ -65,32 +67,36 @@ const Modal = ({ active, setActive, clickedId, options }) => {
     return (
         <ModalLayout active={active} onClick={() => setActive(false)}>
             <ModalContent active={active} onClick={(e) => e.stopPropagation()}>
-                <StyledTitle textAlign={"center"}>
-                    {clickedId ? "Редактирование" : "Добавление"}
-                </StyledTitle>
-                <StyledInput
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                    placeholder="Введите заголовок.."
-                />
-                <StyledInput
-                    value={body}
-                    onChange={(e) => setBody(e.target.value)}
-                    placeholder="Введите описание.."
-                />
-                <Select
-                    // defaultValue={{ value: userId, label: userId }}
-                    options={options}
-                    placeholder={"Выберите userId"}
-                    onChange={setUserId}
-                    value={userId}
-                />
-                <StyledActions>
-                    <StyledButton onClick={() => setActive(false)}>
-                        Отменить
-                    </StyledButton>
-                    <StyledButton onClick={onSubmit}>Сохранить</StyledButton>
-                </StyledActions>
+                <StyledForm onSubmit={(e) => onSubmit(e)}>
+                    <StyledTitle textAlign={"center"}>
+                        {clickedId ? "Редактирование" : "Добавление"}
+                    </StyledTitle>
+                    <StyledInput
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
+                        placeholder="Введите заголовок.."
+                    />
+                    <StyledInput
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                        placeholder="Введите описание.."
+                    />
+                    <Select
+                        options={options}
+                        placeholder={"Выберите userId"}
+                        onChange={setUserId}
+                        value={userId}
+                    />
+                    <StyledActions>
+                        <StyledButton
+                            type="button"
+                            onClick={() => setActive(false)}
+                        >
+                            Отменить
+                        </StyledButton>
+                        <StyledButton type="submit">Сохранить</StyledButton>
+                    </StyledActions>
+                </StyledForm>
             </ModalContent>
         </ModalLayout>
     );
