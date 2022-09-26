@@ -21,25 +21,27 @@ const Modal = ({ active, setActive, clickedId, options }) => {
     const [userId, setUserId] = useState(null);
 
     const onSubmit = () => {
-        if (clickedId) {
-            changePost({
-                id: clickedId,
-                userId: userId.value,
-                title: title,
-                body: body,
-            });
-        } else {
-            addPost({
-                id: data.length + 1,
-                userId: userId.value,
-                title: title,
-                body: body,
-            });
+        if (userId.value && title && body) {
+            if (clickedId) {
+                changePost({
+                    id: clickedId,
+                    userId: userId.value,
+                    title: title,
+                    body: body,
+                });
+            } else {
+                addPost({
+                    id: data.length + 1,
+                    userId: userId.value,
+                    title: title,
+                    body: body,
+                });
+            }
+            setTitle("");
+            setBody("");
+            setUserId("");
+            setActive(false);
         }
-        setTitle("");
-        setBody("");
-        setUserId("");
-        setActive(false);
     };
 
     useEffect(() => {
