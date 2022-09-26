@@ -247,18 +247,24 @@ const Table = () => {
                                     <td>{data.title}</td>
                                     <td>{data.body}</td>
                                     <td>
-                                        <StyledButton
-                                            color="#FFC0C7"
-                                            onClick={() => deletePost(data.id)}
-                                        >
-                                            Удалить
-                                        </StyledButton>
+                                        <StyledActions>
+                                            <StyledButton
+                                                color="#FFC0C7"
+                                                onClick={() =>
+                                                    deletePost(data.id)
+                                                }
+                                            >
+                                                Удалить
+                                            </StyledButton>
 
-                                        <StyledButton
-                                            onClick={() => onEditPost(data.id)}
-                                        >
-                                            Редактировать
-                                        </StyledButton>
+                                            <StyledButton
+                                                onClick={() =>
+                                                    onEditPost(data.id)
+                                                }
+                                            >
+                                                Редактировать
+                                            </StyledButton>
+                                        </StyledActions>
                                     </td>
                                 </tr>
                             ))
