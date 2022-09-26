@@ -79,7 +79,7 @@ const Modal = ({ active, setActive, clickedId, options }) => {
                 <Select
                     // defaultValue={{ value: userId, label: userId }}
                     options={options}
-                    placeholder={userId}
+                    placeholder={"Выберите userId"}
                     onChange={setUserId}
                     value={userId}
                 />
