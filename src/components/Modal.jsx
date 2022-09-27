@@ -33,7 +33,9 @@ const Modal = ({ active, setActive, clickedId, options }) => {
                 });
             } else {
                 addPost({
-                    id: data.length + 1,
+                    id: data.reduce((acc, curr) =>
+                        acc.id > curr.id ? acc.id + 1 : curr.id + 1
+                    ),
                     userId: userId.value,
                     title: title,
                     body: body,
@@ -62,6 +64,9 @@ const Modal = ({ active, setActive, clickedId, options }) => {
             );
             setBody([...data].filter((post) => post.id === clickedId)[0].body);
         }
+        setTitle("");
+        setBody("");
+        setUserId("");
     }, [active]);
 
     return (
