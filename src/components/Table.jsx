@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import {
     Container,
@@ -111,10 +111,10 @@ const Table = () => {
         }
     };
 
-    const onEditPost = useCallback((id) => {
+    const onEditPost = (id) => {
         setClickedId(id);
         setModalActive(true);
-    }, []);
+    };
 
     const onAddPost = () => {
         setClickedId(null);
@@ -148,8 +148,6 @@ const Table = () => {
                 return { value: select, label: select };
             })
         );
-
-        console.log(data);
     }, [data]);
 
     useEffect(() => {
