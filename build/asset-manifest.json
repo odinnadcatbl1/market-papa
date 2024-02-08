@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/market-papa/build/static/js/main.34876176.js",
+    "index.html": "/market-papa/build/index.html",
+    "main.34876176.js.map": "/market-papa/build/static/js/main.34876176.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.34876176.js"
+  ]
+}
